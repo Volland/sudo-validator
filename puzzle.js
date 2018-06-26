@@ -71,16 +71,12 @@ function validate(board) {
     
     for(let column = 0 ; column < MAX_BOARD_SIZE; column ++ ) {
        const cell = board[row][column];
-       if (!isValidCell(cell)) {
+        if(!(isValidCell(cell) &&
+             isUniqueCellInGroup(columns, column, cell) &&
+             isUniqueCellInGroup(grids, calculateGridIndex(row, column), cell))
+        ) {
            return false;
        }
-       if(!isUniqueCellInGroup(columns, column, cell)) {
-           return false;
-       }
-       if(!isUniqueCellInGroup(grids, calculateGridIndex(row, column), cell)) {
-        return false;
-       }
-
     } 
   }
   
