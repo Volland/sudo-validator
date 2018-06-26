@@ -28,14 +28,13 @@
  * @params board an array of arrays, where each array element represents a row in a sudoku table
  * @return true if the Sudoku table contains valid values, false otherwise.
  */
-const _ = require('lodash'); 
+
 
 const isValidNumber =  x => x === null || (!isNaN(x*1) && x >= 1 && x<= 9)
 const isUniqueArray = a  => {
-  const notEmptyValue =  a.filter( i => i !== null);
-  const uniqValues = _.uniq(notEmptyValue);
-  return notEmptyValue.length === uniqValues.length;
-}
+  const notEmptyValue =  (a || []).filter( i => i !== null);
+  return notEmptyValue.length === notEmptyValue.filter((value, index, self) => self.indexOf(value) === index).length;
+};
 
 function validate(board) {
   
