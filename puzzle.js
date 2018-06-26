@@ -29,25 +29,58 @@
  * @return true if the Sudoku table contains valid values, false otherwise.
  */
 
-
-const isValidNumber =  x => x === null || (!isNaN(x*1) && x >= 1 && x<= 9)
-const isUniqueArray = a  => {
+const MAX_BOARD_SIZE  = 9;
+const GRID_SIZE = 3 ;
+const isValidCell =  x => x === null || (!isNaN(x*1) && x >= 1 && x<= 9);
+const isUniqueGroup = a  => {
   const notEmptyValue =  (a || []).filter( i => i !== null);
   return notEmptyValue.length === notEmptyValue.filter((value, index, self) => self.indexOf(value) === index).length;
 };
 
+const calculateGridIndex = (row, column) =>  Math.floor( row / GRID_SIZE ) * GRID_SIZE  +  Math.floor( column / GRID_SIZE );
+
+const isUniqueCellInGroup = (arr , index , value) => {
+    if (value === null) {
+        return true;
+    }
+    if(arr[index] === undefined) {
+        arr[index] = [];
+    }
+    if(arr[index].indexOf(value) === -1) {
+        arr[index].push(value);
+        return true;
+    }
+    return false;
+};
+
+
 function validate(board) {
-  
-  for(let row = 0 ; row < 9 ; row++) {
-     if (!isUniqueArray(board[row])) {
+  const columns = [];
+  const grids = [];
+  if(!board || board.length !== MAX_BOARD_SIZE) {
+      return false ;
+  }
+
+  for(let row = 0 ; row < MAX_BOARD_SIZE ; row++) {
+     if(board[row].length !== MAX_BOARD_SIZE) {
+         return false;
+     }
+     if (!isUniqueGroup(board[row])) {
         return false;
      }
     
-    for(let column = 0 ; column < 9; column++ ) {
-      
-       if (!isValidNumber(board[row][column])) {
+    for(let column = 0 ; column < MAX_BOARD_SIZE; column ++ ) {
+       const cell = board[row][column];
+       if (!isValidCell(cell)) {
            return false;
        }
+       if(!isUniqueCellInGroup(columns, column, cell)) {
+           return false;
+       }
+       if(!isUniqueCellInGroup(grids, calculateGridIndex(row, column), cell)) {
+        return false;
+       }
+
     } 
   }
   
