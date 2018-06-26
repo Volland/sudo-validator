@@ -44,10 +44,10 @@ const isUniqueCellInGroup = (arr , index , value) => {
         return true;
     }
     if(arr[index] === undefined) {
-        arr[index] = [];
+        arr[index] = {};
     }
-    if(arr[index].indexOf(value) === -1) {
-        arr[index].push(value);
+    if(!arr[index][`k${value}`]) {
+        arr[index][`k${value}`] = true;
         return true;
     }
     return false;
